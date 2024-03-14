@@ -12,36 +12,28 @@ const Login = () => {
     const email = useRef(null);
     const password = useRef(null);
 
-    const handleButtonClick =  () => {
+    const handleButtonClick = async () => {
         // validation of data
       
         console.log(email.current.value);
+        console.log(name.current.value);
         console.log(password.current.value);
+       
+       
       const message =  checkValidData(email.current.value, password.current.value); 
-    setErrorMessage(message); 
-    if(message) return;
+      setErrorMessage(message); 
+      if(message) return;
 
-    // signIn/signUp logic
-    if(!isSignInForm) {
-        // Sign Up logic
-        createUserWithEmailAndPassword(auth, email.current.value, password.current.value)
+       await createUserWithEmailAndPassword(auth, email.current.value, password.current.value)
   .then((userCredential) => {
-    // Signed up 
     const user = userCredential.user;
     console.log(user);  
-    // ...
   })
   .catch((error) => {
     const errorCode = error.code;
     const errorMessage = error.message;
     setErrorMessage(errorCode +  "-" + errorMessage)
-    // ..
-  });
-    }
-    else{
-        // Sign In logic
-
-    }
+  }); 
 
     }
 
