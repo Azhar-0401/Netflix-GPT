@@ -1,7 +1,7 @@
 import React, { useState , useRef} from 'react';
 import Header from './Header';
 import { checkValidData } from '../utils/validate';
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword , signInWithEmailAndPassword  } from "firebase/auth";
 import { auth } from '../utils/firebase';
 
 
@@ -12,30 +12,85 @@ const Login = () => {
     const email = useRef(null);
     const password = useRef(null);
 
-    const handleButtonClick = async () => {
-        // validation of data
+//     const handleButtonClick = async () => {
+//         // validation of data
       
-        console.log(email.current.value);
-        console.log(name.current.value);
-        console.log(password.current.value);
+//         console.log(email.current.value);
+//         console.log(name.current.value);
+//         console.log(password.current.value);
        
        
+//       const message =  checkValidData(email.current.value, password.current.value); 
+//       setErrorMessage(message); 
+//       if(message) return;
+
+//       if(!isSignInForm){
+//        await createUserWithEmailAndPassword(auth, email.current.value, password.current.value)
+//   .then((userCredential) => {
+//     const user = userCredential.user;
+//     console.log(user);  
+//   })
+//   .catch((error) => {
+//     const errorCode = error.code;
+//     const errorMessage = error.message;
+//     setErrorMessage(errorCode +  "-" + errorMessage)
+//   }); 
+// }
+// else{
+//   await signInWithEmailAndPassword(auth, email.current.value, password.current.value)
+//   .then((userCredential) => {
+//     // Signed in 
+//     const user = userCredential.user;
+//     console.log(user);
+//   })
+//   .catch((error) => {
+//     const errorCode = error.code;
+//     const errorMessage = error.message;
+//     setErrorMessage(errorCode + "-" + errorMessage); 
+//   });
+// }
+
+    // }
+
+
+    const handleButtonClick = async () => {
+      // validation of data
+      console.log(email.current.value);
+      console.log(name.current ? name.current.value : ''); // Check if name.current exists
+      console.log(password.current.value);
+      
       const message =  checkValidData(email.current.value, password.current.value); 
       setErrorMessage(message); 
       if(message) return;
+      
+      if(!isSignInForm){
+        await createUserWithEmailAndPassword(auth, email.current.value, password.current.value)
+          .then((userCredential) => {
+            const user = userCredential.user;
+            console.log(user);  
+          })
+          .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            setErrorMessage(errorCode +  "-" + errorMessage);
+          }); 
+      } else {
+        signInWithEmailAndPassword(auth, email.current.value, password.current.value)
+          .then((userCredential) => {
+            // Signed in 
+            const user = userCredential.user;
+            console.log(user);
+          })
+          .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            setErrorMessage(errorCode + "-" + errorMessage); 
+          });
+      }
+  }
 
-       await createUserWithEmailAndPassword(auth, email.current.value, password.current.value)
-  .then((userCredential) => {
-    const user = userCredential.user;
-    console.log(user);  
-  })
-  .catch((error) => {
-    const errorCode = error.code;
-    const errorMessage = error.message;
-    setErrorMessage(errorCode +  "-" + errorMessage)
-  }); 
 
-    }
+
 
     const toggleSignInForm = () => {
         setSignInForm(!isSignInForm);
